@@ -1,0 +1,11 @@
+// denotes comments
+/**/ can be used for comments
+
+all mathematical operators are the same
+comparison operators are changed
+; represents NOT
+
+! is used to end lines 
+
+return is obvious
+fun is used to start function definition

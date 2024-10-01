@@ -1,0 +1,9 @@
+if (x<2) {
+	return "nope"!
+}
+
+;56{} // THIS IS A COMMENT
+
+fun addNumbers(a,b) {
+	return (a+b)! /* adds 2 numbers*/
+}
