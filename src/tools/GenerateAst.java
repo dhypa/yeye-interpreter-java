@@ -33,8 +33,8 @@ public class GenerateAst {
 		// Writing classes
 		for (String type: types) {
 			String classname = type.split(":")[0].trim();
-			String fields = type.split(":")[1].trim();
-			defineType(writer,baseName,classname,fields);
+			String fieldList = type.split(":")[1].trim();
+			defineType(writer,baseName,classname,fieldList);
 
 		}
 
@@ -43,15 +43,28 @@ public class GenerateAst {
 		writer.close();
 	}
 
-	private static void defineType(PrintWriter writer, String baseName, String classname, String fields) {
+	private static void defineType(PrintWriter writer, String baseName, String classname, String fieldList) {
+		String[] fields = fieldList.split(",");
 		writer.println("    static class "+ classname + " extends "+baseName+"{");
 
 		writer.println(classname + "("+fields+")"+"{");
 
+		for(String field: fields) {
+			field = field.trim();
+			System.out.println("this."+field.split(" ")[1]);
+		}
+		
 		//closes constructor
 		writer.println("}");
 
-
+		System.out.println("final");
+		
+		for(String field: fields) {
+			field = field.trim();
+			String[] splited = field.split(" ");
+			System.out.println("final."+field.split(" ")[0]+" "+field.split(" ")[1]+";");
+		}
+		
 		// closes base class
 		writer.println("}");
 
