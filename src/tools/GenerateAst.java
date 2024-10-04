@@ -24,16 +24,41 @@ public class GenerateAst {
 		String path = outputDir + "/" + baseName + ".java";
 		PrintWriter writer = new PrintWriter(path, "UTF-8");
 
-//		writer.println("package com.craftinginterpreters.lox;");
+		//		writer.println("package com.craftinginterpreters.lox;");
 		writer.println();
 		writer.println("import java.util.List;");
 		writer.println();
 		writer.println("abstract class " + baseName + " {");
-		
-			
-		
+
+		// Writing classes
+		for (String type: types) {
+			String classname = type.split(":")[0].trim();
+			String fields = type.split(":")[1].trim();
+			defineType(writer,baseName,classname,fields);
+
+		}
+
 
 		writer.println("}");
 		writer.close();
 	}
+
+	private static void defineType(PrintWriter writer, String baseName, String classname, String fields) {
+		writer.println("    static class "+ classname + " extends "+baseName+"{");
+
+		writer.println(classname + "("+fields+")"+"{");
+
+		//closes constructor
+		writer.println("}");
+
+
+		// closes base class
+		writer.println("}");
+
+	}
 }
+
+
+
+
+
