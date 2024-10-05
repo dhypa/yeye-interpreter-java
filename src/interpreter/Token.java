@@ -1,3 +1,4 @@
+package interpreter;
 
 
 enum TokenType {

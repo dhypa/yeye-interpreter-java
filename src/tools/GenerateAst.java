@@ -29,6 +29,8 @@ public class GenerateAst {
 		writer.println("import java.util.List;");
 		writer.println();
 		writer.println("abstract class " + baseName + " {");
+		
+		defineVisitor(writer, baseName, types);
 
 		// Writing classes
 		for (String type: types) {
@@ -37,35 +39,50 @@ public class GenerateAst {
 			defineType(writer,baseName,classname,fieldList);
 
 		}
+		
+		writer.println("    abstract <R> R accept(Visitor<R> visitor);");
 
 
 		writer.println("}");
 		writer.close();
 	}
+	
+	private static void defineVisitor(PrintWriter writer, String baseName, List<String> types) {
+		writer.println("    interface Visitor<R> {");
+		for (String type: types) {
+			String typeName = type.split(":")[0].trim();
+			writer.println("    R visit"+typeName+ baseName+"("+typeName+" "+baseName.toLowerCase()+");");
+		}
+		writer.println("}");
+		
+	}
 
 	private static void defineType(PrintWriter writer, String baseName, String classname, String fieldList) {
 		String[] fields = fieldList.split(",");
-		writer.println("    static class "+ classname + " extends "+baseName+"{");
+		writer.println("    static class "+ classname + " extends "+baseName+"{"); // class definition
 
-		writer.println(classname + "("+fields+")"+"{");
-
+		// class constructor
+		writer.println(classname + "("+fieldList+")"+"{");
 		for(String field: fields) {
-			field = field.trim();
-			System.out.println("this."+field.split(" ")[1]);
+			String[] fieldSplitted = field.trim().split(" ");
+			writer.println("this."+fieldSplitted[1]+"="+ fieldSplitted[1] +";");
 		}
-		
-		//closes constructor
 		writer.println("}");
-
-		System.out.println("final");
 		
+		// implements visitor pattern
+		writer.println();
+		writer.println("@Override");
+		writer.println("    <R> R accept(Visitor<R> visitor) {");
+		writer.println("return visitor.visit"+classname+baseName+"(this);");
+		writer.println("}");
+		writer.println();
+		
+		
+		// allocates fields
 		for(String field: fields) {
-			field = field.trim();
-			String[] splited = field.split(" ");
-			System.out.println("final."+field.split(" ")[0]+" "+field.split(" ")[1]+";");
+			String[] splitted = field.trim().split(" ");
+			writer.println("final "+splitted[0]+" "+splitted[1]+";");
 		}
-		
-		// closes base class
 		writer.println("}");
 
 	}

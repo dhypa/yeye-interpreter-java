@@ -1,3 +1,4 @@
+package interpreter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +69,9 @@ public class Lexer {
 				break;
 			case '=':
 				addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
+				break;
 			case '-':
+				System.out.println("minus found!");
 				addToken(TokenType.MINUS);
 				break;
 			case '+':
@@ -91,6 +94,8 @@ public class Lexer {
 					while (peek() != '\n' && !isAtEnd()) consume();
 				} else if (match('*')){
 					while (peek() != '*' && peekTwo() != '/') consume();
+					consume(); 
+					consume();
 				}
 				else {
 					addToken(TokenType.SLASH);
