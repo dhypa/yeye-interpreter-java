@@ -80,7 +80,7 @@ class Parser {
 	private Expr unary() {
 		Expr expr = primary();
 
-		while(match(TokenType.MINUS, TokenType.SEMICOLON)) {
+		if(match(TokenType.SEMICOLON,TokenType.MINUS )) {
 			Token operator = previous();
 			Expr right = unary();
 			return new Expr.Unary(operator, right);
@@ -92,8 +92,10 @@ class Parser {
 		if (match(TokenType.FALSE)) return new Expr.Literal(false);
 		if (match(TokenType.TRUE)) return new Expr.Literal(true);
 		if (match(TokenType.NIL)) return new Expr.Literal(null);
-
+		
+		System.out.println();
 		if (match(TokenType.NUMBER, TokenType.STRING)) {
+			System.out.println("number detected");
 			return new Expr.Literal(previous().literal);
 		}
 

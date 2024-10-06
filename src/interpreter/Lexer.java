@@ -71,18 +71,20 @@ public class Lexer {
 				addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
 				break;
 			case '-':
-				System.out.println("minus found!");
 				addToken(TokenType.MINUS);
 				break;
 			case '+':
 				addToken(TokenType.PLUS);
+				break;
 			case '*':
 				addToken(TokenType.STAR);
 				break;
 			case '<':
 				addToken(match('=')? TokenType.LESS_EQUAL : TokenType.LESS);
+				break;
 			case '>':
 				addToken(match('=')? TokenType.GREATER_EQUAL : TokenType.GREATER);
+				break;
 			case ';':
 				addToken(match('=') ? TokenType.SEMICOLON_EQUAL : TokenType.SEMICOLON);
 				break;
