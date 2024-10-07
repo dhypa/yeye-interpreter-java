@@ -47,7 +47,7 @@ public class Lexer {
 	}
 
 	private void scanToken() {
-		char c = consume();
+		char c = devour();
 		switch (c) {
 			case '(':
 				addToken(TokenType.LEFT_PAREN);
@@ -93,11 +93,11 @@ public class Lexer {
 				break;
 			case '/':
 				if (match('/')) {
-					while (peek() != '\n' && !isAtEnd()) consume();
+					while (peek() != '\n' && !isAtEnd()) devour();
 				} else if (match('*')){
-					while (peek() != '*' && peekTwo() != '/') consume();
-					consume(); 
-					consume();
+					while (peek() != '*' && peekTwo() != '/') devour();
+					devour(); 
+					devour();
 				}
 				else {
 					addToken(TokenType.SLASH);
@@ -148,17 +148,17 @@ public class Lexer {
 	}
 
 	private void identifier() {
-		while (Character.isLetterOrDigit(peek())) consume();
+		while (Character.isLetterOrDigit(peek())) devour();
 		addToken(keywords.getOrDefault(source.substring(start, current), TokenType.IDENTIFIER));
 	}
 
 	private void number() {
-		while (isDigit(peek()) && !isAtEnd()) consume();
+		while (isDigit(peek()) && !isAtEnd()) devour();
 		if (peek() == '.' && isDigit(peekNext())) {
-			consume();
-			while (isDigit(peek())) consume();
+			devour();
+			while (isDigit(peek())) devour();
 		}
-		addToken(TokenType.NUMBER, Integer.parseInt(source.substring(start, current)));
+		addToken(TokenType.NUMBER, Double.parseDouble(source.substring(start, current)));
 	}
 
 	private boolean isDigit(char c) {
@@ -168,11 +168,11 @@ public class Lexer {
 	public void string() {
 		while (peek() != '"' && !isAtEnd()) {
 			if (peek() == '\n') line++;
-			consume();
+			devour();
 		}
 		if (isAtEnd()) Main.error(line, "Unterminated string");
 
-		consume();
+		devour();
 		String literal = source.substring(start + 1, current - 1);
 		addToken(TokenType.STRING, literal);
 	}
@@ -200,7 +200,7 @@ public class Lexer {
 		return source.charAt(current + 1);
 	}
 
-	private char consume() {
+	private char devour() {
 		return source.charAt(current++);
 	}
 

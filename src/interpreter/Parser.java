@@ -34,7 +34,6 @@ class Parser {
 	}
 	private Expr equality() {
 		Expr expr = comparison();
-
 		while (match(TokenType.SEMICOLON_EQUAL, TokenType.EQUAL_EQUAL)) {
 			Token operator = previous();
 			Expr right = comparison();
@@ -78,8 +77,7 @@ class Parser {
 	}
 
 	private Expr unary() {
-		Expr expr = primary();
-
+		
 		if(match(TokenType.SEMICOLON,TokenType.MINUS )) {
 			Token operator = previous();
 			Expr right = unary();
@@ -93,9 +91,7 @@ class Parser {
 		if (match(TokenType.TRUE)) return new Expr.Literal(true);
 		if (match(TokenType.NIL)) return new Expr.Literal(null);
 		
-		System.out.println();
 		if (match(TokenType.NUMBER, TokenType.STRING)) {
-			System.out.println("number detected");
 			return new Expr.Literal(previous().literal);
 		}
 
