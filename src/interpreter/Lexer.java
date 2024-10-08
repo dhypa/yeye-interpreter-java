@@ -12,7 +12,7 @@ public class Lexer {
 	private int start = 0;
 	private int current = 0;
 	private int line = 1;
-
+	private String linetwo = "";
 	private static final Map<String, TokenType> keywords;
 	static {
 		keywords = new HashMap<>();
