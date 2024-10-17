@@ -7,6 +7,28 @@ import interpreter.Expr.Visitor;
 
 public class Interpreter implements Visitor<Object> {
 
+	public void interpret(Expr expression) {
+		try {
+			Object value = evaluate(expression);
+			System.out.println(stringify(value));
+		} catch (RunTimeError e) {
+			runtimeError(e);
+		}
+	}
+	public String stringify(Object value) {
+		if (value==null) return "nil";
+		if (value instanceof Double){
+			String text = value.toString();
+			if (text.endsWith(".0")) text = text.substring(0, text.length()-2);
+			return text;
+		}
+		return value.toString();
+	}
+	public void runtimeError(RunTimeError e) {
+		System.err.println(e.getMessage() + "\n[line "+e.token.line+"]");
+		Main.hadRuntimeError = true;
+	}
+
 	public Object visitLiteralExpr(Literal expr) {
 		return expr.value;
 	}
@@ -26,8 +48,8 @@ public class Interpreter implements Visitor<Object> {
 				checkNumberOperands(expr.operator, left, right);
 				return (double)left / (double)right;
 			case PLUS:
-				if (left instanceof String && right instanceof String) {
-					return (String)left + (String)right;
+				if (left instanceof String || right instanceof String) {
+					return left.toString()+right.toString();
 				}
 				if (left instanceof Double && right instanceof Double) {
 					return (double)left+(double)right;

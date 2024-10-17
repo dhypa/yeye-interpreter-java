@@ -12,7 +12,9 @@ import java.util.List;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
+	private static final Interpreter interpreter = new Interpreter();
 	private static boolean hadError = false;
+	static boolean hadRuntimeError = false;
 
 	public static void main(String[] args) throws IOException {
 
@@ -56,7 +58,10 @@ public class Main {
 		Expr expression = parser.parse();
 
 		// Stop if there was a syntax error.
-		if (hadError) return;
+		if (hadError) System.exit(45);
+		if (hadRuntimeError) System.exit(55);
+	
+		interpreter.interpret(expression);
 		
 		System.out.println("TREE:");
 		System.out.println(new AstPrinter().print(expression));
