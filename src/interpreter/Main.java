@@ -38,7 +38,7 @@ public class Main {
 			if (line == null || line.equals("quit")){
 				break;
 			}
-			run (line);
+			run(line);
 			hadError=false;
 
 		}
@@ -55,16 +55,16 @@ public class Main {
 		List<Token> tokens = sc.scanTokens();
 
 		Parser parser = new Parser(tokens);
-		Expr expression = parser.parse();
+		List<Stmt> statements = parser.parse();
 
 		// Stop if there was a syntax error.
-		if (hadError) System.exit(45);
+		if (hadError) return;
 		if (hadRuntimeError) System.exit(55);
 	
-		interpreter.interpret(expression);
+		interpreter.interpret(statements);
 		
-		System.out.println("TREE:");
-		System.out.println(new AstPrinter().print(expression));
+//		System.out.println("TREE:");
+//		System.out.println(new AstPrinter().print(expression));
 
 	}
 

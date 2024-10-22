@@ -1,12 +1,19 @@
 package interpreter;
 
+import java.util.List;
+
 import interpreter.Expr.Binary;
 import interpreter.Expr.Grouping;
 import interpreter.Expr.Literal;
-import interpreter.Expr.Visitor;
 
-public class Interpreter implements Visitor<Object> {
-
+public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Object>{
+	
+	public void interpret(List<Stmt> statements) {
+		for (var statement: statements) {
+			Object value = evaluate(statement);
+			
+		}
+	}
 	public void interpret(Expr expression) {
 		try {
 			Object value = evaluate(expression);

@@ -1,10 +1,6 @@
 package interpreter;
+import java.util.ArrayList;
 import java.util.List;
-
-import interpreter.Expr.Binary;
-import interpreter.Expr.Grouping;
-import interpreter.Expr.Literal;
-import interpreter.Expr.Unary;
 
 
 
@@ -18,15 +14,38 @@ class Parser {
 			System.out.println(token.toString());
 		}
 		this.tokens = tokens;
-		
+
 	}
 
-	Expr parse() {
-		try {
-			return expression();
-		} catch (ParseError error) {
-			return null;
+	//	Expr parse() {
+	//		try {
+	//			return expression();
+	//		} catch (ParseError error) {
+	//			return null;
+	//		}
+	//	}
+	List<Stmt> parse() {
+		List<Stmt> statements = new ArrayList<>();
+		while (!isAtEnd()) {
+			statements.add(statement());
 		}
+
+		return statements; 
+	}
+	private Stmt statement() {
+		if (match(TokenType.PRINT)) return printStatement();
+
+		return expressionStatement();
+	}
+	private Stmt printStatement() {
+		Expr value = expression();
+		consume(TokenType.SEMICOLON, "Expect ';' after value.");
+		return new Stmt.Print(value);
+	}
+	private Stmt expressionStatement() {
+		Expr expr = expression();
+		consume(TokenType.SEMICOLON, "Expect ';' after expression.");
+		return new Stmt.Expression(expr);
 	}
 
 	private Expr expression() {
@@ -77,7 +96,7 @@ class Parser {
 	}
 
 	private Expr unary() {
-		
+
 		if(match(TokenType.SEMICOLON,TokenType.MINUS )) {
 			Token operator = previous();
 			Expr right = unary();
@@ -90,7 +109,7 @@ class Parser {
 		if (match(TokenType.FALSE)) return new Expr.Literal(false);
 		if (match(TokenType.TRUE)) return new Expr.Literal(true);
 		if (match(TokenType.NIL)) return new Expr.Literal(null);
-		
+
 		if (match(TokenType.NUMBER, TokenType.STRING)) {
 			return new Expr.Literal(previous().literal);
 		}
